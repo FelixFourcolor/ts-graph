@@ -65,7 +65,7 @@ declare namespace Node {
 		return: Node<this["arg"], dist>;
 	}
 
-	export interface ltFn extends Fn<[Node, Node], boolean> {
+	export interface cmp extends Fn<[Node, Node], boolean> {
 		return: lt<this["arg"][0]["dist"], this["arg"][1]["dist"]>;
 	}
 
@@ -104,9 +104,9 @@ declare namespace NodeQueue {
 		Table.get<name, queue> extends infer node extends Node ? node : nil;
 
 	export interface popMin extends Fn<NodeQueue, [Node, NodeQueue] | nil> {
-		return: List.min<
-			Node.ltFn,
-			Table.values<this["arg"]>
+		return: Fn.pipe<
+			this["arg"],
+			[Table.values, List.min<Node.cmp>]
 		> extends infer min extends Node
 			? [min, Fn.call<remove<min>, this["arg"]>]
 			: nil;

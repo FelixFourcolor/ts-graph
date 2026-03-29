@@ -1,3 +1,4 @@
+import type { Fn } from "./function";
 import type { nil } from "./nil";
 import type { toList } from "./union";
 
@@ -26,5 +27,7 @@ export namespace Table {
 
 	export type keys<t extends Table> = toList<keyof t>;
 
-	export type values<t extends Table> = toList<t[keyof t]>;
+	export interface values extends Fn<Table> {
+		return: toList<this["arg"][keyof this["arg"]]>;
+	}
 }

@@ -8,15 +8,6 @@ export namespace List {
 		l = "curry",
 	> = l extends "curry" ? foldFn<f, acc> : foldImpl<f, acc, l>;
 
-	export type min<
-		lt extends Fn<[unknown, unknown], boolean>,
-		l extends unknown[],
-	> = l extends [infer only]
-		? only
-		: l extends [infer first, infer second, ...infer rest]
-			? min<lt, [takeMin<lt, first, second>, ...rest]>
-			: nil;
-
 	export interface filterMap<f extends Fn> extends Fn {
 		return: filterMapImpl<f, this["arg"]>;
 	}
@@ -25,12 +16,13 @@ export namespace List {
 		? mapFn<f>
 		: mapImpl<f, l>;
 
-	export type flatten<ls extends unknown[][]> = ls extends [
-		infer head extends unknown[],
-		...infer tail extends unknown[][],
-	]
-		? [...head, ...flatten<tail>]
-		: [];
+	export interface flatten extends Fn {
+		return: flattenImpl<this["arg"]>;
+	}
+
+	export interface min<lt extends Fn<[unknown, unknown], boolean>> extends Fn {
+		return: minImpl<lt, this["arg"]>;
+	}
 
 	export type reverse<l, acc extends unknown[] = []> = l extends [
 		infer head,
@@ -40,6 +32,13 @@ export namespace List {
 		: acc;
 }
 
+export type flattenImpl<ls> = ls extends [
+	infer head extends unknown[],
+	...infer tail extends unknown[][],
+]
+	? [...head, ...flattenImpl<tail>]
+	: [];
+
 type foldImpl<f extends Fn, acc, l> = l extends [infer head, ...infer tail]
 	? foldImpl<f, Fn.call<f, [acc, head]>, tail>
 	: acc;
@@ -48,6 +47,13 @@ interface foldFn<f extends Fn<[unknown, unknown]>, acc extends f["arg"][0]>
 	return: foldImpl<f, acc, this["arg"]>;
 }
 
+type minImpl<lt extends Fn<[unknown, unknown], boolean>, l> = l extends [
+	infer singleton,
+]
+	? singleton
+	: l extends [infer first, infer second, ...infer rest]
+		? minImpl<lt, [takeMin<lt, first, second>, ...rest]>
+		: nil;
 type takeMin<lt extends Fn<[unknown, unknown], boolean>, a, b> =
 	Fn.call<lt, [a, b]> extends true ? a : b;
 

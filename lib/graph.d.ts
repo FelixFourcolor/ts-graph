@@ -33,10 +33,7 @@ export namespace Graph {
 
 	export type transpose<
 		g extends Graph,
-		edges extends Edge[] = Table.values<g> extends infer edgeLists extends
-			Edge[][]
-			? List.flatten<edgeLists>
-			: never,
+		edges = Fn.pipe<g, [Table.values, List.flatten]>,
 		acc extends Graph = Table.empty,
 	> = edges extends [infer head extends Edge, ...infer tail extends Edge[]]
 		? transpose<g, tail, addEdge<Edge.reverse<head>, acc>>
