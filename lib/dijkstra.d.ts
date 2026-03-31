@@ -1,9 +1,5 @@
 import type { Edge, Graph } from "./graph";
-import type { inf, lt, plus } from "./helpers/arithmetic";
-import type { Fn } from "./helpers/function";
-import type { List } from "./helpers/list";
-import type { nil } from "./helpers/nil";
-import type { Table } from "./helpers/table";
+import type { Fn, inf, List, lt, nil, plus, Table } from "./helpers";
 
 export type shortestPath<
 	src extends string,

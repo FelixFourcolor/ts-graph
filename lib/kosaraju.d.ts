@@ -1,7 +1,5 @@
 import type { Graph } from "./graph";
-import type { Fn } from "./helpers/function";
-import type { List } from "./helpers/list";
-import type { Table } from "./helpers/table";
+import type { Fn, List, Table } from "./helpers";
 
 export type stronglyConnectedComponents<g extends Graph> = dfs<
 	Graph.transpose<g>,

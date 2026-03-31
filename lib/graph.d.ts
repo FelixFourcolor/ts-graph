@@ -1,7 +1,4 @@
-import type { Fn } from "./helpers/function";
-import type { List } from "./helpers/list.d.ts";
-import type { nil } from "./helpers/nil";
-import type { Table } from "./helpers/table";
+import type { Fn, List, nil, Table } from "./helpers";
 
 export type Edge<
 	src extends string = string,
